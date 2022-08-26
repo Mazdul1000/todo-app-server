@@ -13,7 +13,23 @@ const port = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
+// Verify Token
+// Token verification:
+async function verifyToken(req, res, next) {
+    const headerAuthor = req.headers.authorization;
+    if (!headerAuthor) {
+        return res.status(401).send({ message: 'Access Unauthorized' });
+    }
 
+    const token = headerAuthor.split(' ')[1];
+    jwt.verify(token, process.env.ACCESS_TOKEN, function (error, decoded) {
+        if (error) {
+            return res.status(403).send({ message: 'Access forbidden' })
+        }
+        req.decoded = decoded;
+        next();
+    })
+}
 
 // Connect with mongoDB
 
@@ -29,9 +45,24 @@ async function run(){
         const userCollection = client.db('todo-db').collection('users');
         // const taskCollection = client.db('Todo').collection('tasks');
 
-        const user = {name: "Mazdul", email: "mazdddul@mail.com"}
-        const result = await userCollection.insertOne(user);
+      
 
+
+           // adding users to database:
+           app.put('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = req.body;
+            const filter = { email: email }
+            const options = { upsert: true };
+
+            const updateDoc = {
+                $set: user,
+            };
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+            const token = jwt.sign({ email: email },
+                process.env.ACCESS_TOKEN, { expiresIn: '90d' })
+            res.send({ result, token });
+        });
 
 
         // Get all the task 
