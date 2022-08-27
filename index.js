@@ -100,7 +100,7 @@ async function run(){
             if(page){
                 tasks = await cursor.skip((page-1)*5).limit(5).toArray();
             }else{
-                tasks = await cursor.toArray();
+                tasks = await cursor.toArray().slice().reverse();
             }
             return res.send(tasks)
         }
