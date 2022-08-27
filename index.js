@@ -134,10 +134,11 @@ async function run(){
         const id = req.params.id;
         const email = req.query.email;
         const decodedEmail = req.decoded.email;
-
+    console.dir(email)
+      let result;
         if(email === decodedEmail){
-          const query = { _id: ObjectId(id) };
-        const result = await taskCollection.deleteOne(query);  
+        const query = { _id: ObjectId(id) }
+      result = await taskCollection.deleteOne(query);  
         }
         
         res.send(result);
