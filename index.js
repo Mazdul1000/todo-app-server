@@ -95,7 +95,7 @@ async function run(){
 
         if (email === decodedEmail) {
             const query = { email: email }
-            const cursor = taskCollection.find(query)
+            const cursor = taskCollection.find(query).sort({date:-1})
             let tasks;
             if(page){
                 tasks = await cursor.skip((page-1)*5).limit(5).toArray();
