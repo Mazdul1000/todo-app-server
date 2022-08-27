@@ -128,6 +128,20 @@ async function run(){
         const result = await taskCollection.updateOne(filter, updateDoc);
         res.send(result);
     })
+
+    // DELETE TASK
+    app.delete('/task/:id',verifyToken, async (req, res) => {
+        const id = req.params.id;
+        const email = req.query.email;
+        const decodedEmail = req.decoded.email;
+
+        if(email === decodedEmail){
+          const query = { _id: ObjectId(id) };
+        const result = await taskCollection.deleteOne(query);  
+        }
+        
+        res.send(result);
+    })
         
     }
 
