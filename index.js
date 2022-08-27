@@ -111,6 +111,18 @@ async function run() {
                 count
             });
         })
+         // Get task count of Incomplete
+         app.get('/task/count/notdone', async (req, res) => {
+            const email = req.query.email;
+            const query = {
+                email,
+                completed : false
+            };
+            const count = await taskCollection.countDocuments(query);
+            res.send({
+                count
+            });
+        })
 
         // Get tasks
 
@@ -167,6 +179,34 @@ async function run() {
                 const query = {
                     email: email,
                     completed: true
+                }
+                const cursor = taskCollection.find(query).sort({
+                    $natural: -1
+                })
+                let tasks;
+                if (page) {
+                    tasks = await cursor.skip((page - 1) * 5).limit(5).toArray();
+                } else {
+                    tasks = await cursor.toArray();
+                }
+                return res.send(tasks)
+            } else {
+                return res.status(403).send({
+                    message: 'Access forbidden'
+                })
+            }
+        })
+
+        // GET TASK BY INCOMPLETE
+        app.get('/tasks/incomplete', verifyToken, async (req, res) => {
+            const email = req.query.email;
+            const page = parseInt(req.query.page);
+            const decodedEmail = req.decoded.email;
+
+            if (email === decodedEmail) {
+                const query = {
+                    email: email,
+                    completed: false
                 }
                 const cursor = taskCollection.find(query).sort({
                     $natural: -1
