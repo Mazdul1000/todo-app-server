@@ -116,8 +116,8 @@ async function run(){
         const decodedEmail = req.decoded.email;
         
         if( decodedEmail === email){
-            const query = { email: email, completed: true }
-            const cursor = taskCollection.find(query).sort({$natural: -1})
+            const filter = { email: email, completed: true }
+            const cursor = taskCollection.find({filter}).sort({$natural: -1})
             let tasks;
             if(page){
                 tasks = await cursor.skip((page-1)*5).limit(5).toArray();
