@@ -75,26 +75,33 @@ async function run(){
 
     // Get tasks
 /*     app.get('/task', async(req, res) => {
-        const page = parseInt(req.query.page);
+        
         const query= {}
-        let tasks;
+        
         
         const cursor = taskCollection.find(query)
         if(page || size){
-            tasks = await cursor.skip((page-1)*5).limit(5).toArray();
+            
         }else{
-            tasks = await cursor.toArray();
+            
         }
         res.send(tasks)
     }) */
 
     app.get('/task', verifyToken, async (req, res) => {
         const email = req.query.email;
+        const page = parseInt(req.query.page);
         const decodedEmail = req.decoded.email;
 
         if (email === decodedEmail) {
             const query = { email: email }
-            const tasks = await taskCollection.find(query).toArray();
+            const cursor = taskCollection.find(query)
+            let tasks;
+            if(page){
+                tasks = await cursor.skip((page-1)*5).limit(5).toArray();
+            }else{
+                tasks = await cursor.toArray();
+            }
             return res.send(tasks)
         }
         else {
