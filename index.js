@@ -111,13 +111,12 @@ async function run(){
 })
  
     // GET TASK BY COMPLETED
-    app.get('/task', verifyToken, async(req, res) => {
+    app.get('/task/completed', async(req, res) => {
         const email = req.query.id;
-        const isCompleted = req.query.completed;
         const decodedEmail = req.decoded.email;
         
         if( decodedEmail === email){
-            const query = { email: email, completed: isCompleted }
+            const query = { email: email, completed: true }
             const cursor = taskCollection.find(query).sort({$natural: -1})
             let tasks;
             if(page){
