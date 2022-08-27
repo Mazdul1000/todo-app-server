@@ -112,7 +112,7 @@ async function run() {
             });
         })
          // Get task count of Incomplete
-         app.get('/task/count/notdone', async (req, res) => {
+         app.get('/task/count/incomplete', async (req, res) => {
             const email = req.query.email;
             const query = {
                 email,
