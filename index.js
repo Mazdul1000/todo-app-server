@@ -87,7 +87,7 @@ async function run(){
             if(page){
                 tasks = await cursor.skip((page-1)*5).limit(5).toArray();
             }else{
-                tasks = await cursor.toArray().slice().reverse();
+                tasks = await cursor.toArray();
             }
             return res.send(tasks)
         }
@@ -109,6 +109,31 @@ async function run(){
     }
   
 })
+ 
+    // GET TASK BY COMPLETED
+    app.get('/task', verifyToken, async(req, res) => {
+        const email = req.query.id;
+        const isCompleted = req.query.completed;
+        const decodedEmail = req.decoded.email;
+        
+        if( decodedEmail === email){
+            const query = { email: email, completed: isCompleted }
+            const cursor = taskCollection.find(query).sort({$natural: -1})
+            let tasks;
+            if(page){
+                tasks = await cursor.skip((page-1)*5).limit(5).toArray();
+            }else{
+                tasks = await cursor.toArray();
+            }
+            return res.send(tasks)
+        }
+        else {
+            return res.status(403).send({ message: 'Access forbidden' })
+        }
+        }
+    )
+
+
     
     // ADD NEW TASK
     app.post('/task', async (req, res) => {
