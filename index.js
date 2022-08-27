@@ -112,7 +112,7 @@ async function run(){
  
     // GET TASK BY COMPLETED
     app.get('/task/completed',verifyToken, async(req, res) => {
-        const email = req.query.id;
+        const email = req.query.email;
         const decodedEmail = req.decoded.email;
         
         if( decodedEmail === email){
@@ -129,8 +129,8 @@ async function run(){
         else {
             return res.status(403).send({ message: 'Access forbidden' })
         }
-        }
-    )
+    })
+    
 
 
     
