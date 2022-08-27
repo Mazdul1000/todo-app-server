@@ -111,7 +111,7 @@ async function run(){
 })
  
     // GET TASK BY COMPLETED
-    app.get('/task/completed', async(req, res) => {
+    app.get('/task/completed',verifyToken, async(req, res) => {
         const email = req.query.id;
         const decodedEmail = req.decoded.email;
         
