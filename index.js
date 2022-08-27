@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { MongoClient, ServerApiVersion} = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId} = require('mongodb');
 const query = require('express/lib/middleware/query');
 require('dotenv').config();
 const app = express();
@@ -92,6 +92,18 @@ async function run(){
         const task = req.body;
         const result = await taskCollection.insertOne(task);
         res.send(result)
+    })
+
+    // UPDATE TASK AS COMPLETED
+      app.put('/task/:id', async (req, res) => {
+        const id = req.params.id;
+        const filter =  {_id: ObjectId(id)}
+
+        const updateDoc = {
+            $set: { completed: true },
+        };
+        const result = await taskCollection.updateOne(filter, updateDoc);
+        res.send(result);
     })
         
     }
