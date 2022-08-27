@@ -73,7 +73,7 @@ async function run(){
     })
 
     // Get tasks
-    app.get('/task', async(req, res) => {
+/*     app.get('/task', async(req, res) => {
         const page = parseInt(req.query.page);
         const query= {}
         let tasks;
@@ -85,6 +85,20 @@ async function run(){
             tasks = await cursor.toArray();
         }
         res.send(tasks)
+    }) */
+
+    app.get('/task', verifyToken, async (req, res) => {
+        const email = req.query.email;
+        const decodedEmail = req.decoded.email;
+
+        if (email === decodedEmail) {
+            const query = { email: email }
+            const tasks = await taskCollection.find(query).toArray();
+            return res.send(tasks)
+        }
+        else {
+            return res.status(403).send({ message: 'Access forbidden' })
+        }
     })
 
     // ADD NEW TASK
