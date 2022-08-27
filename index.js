@@ -66,8 +66,9 @@ async function run(){
 
     // Get task count
     app.get('/task/count', async(req, res) => {
-        const query = {};
-        const count = await taskCollection.countDocuments();
+        const email = req.query.email;
+        const query = {email};
+        const count = await taskCollection.countDocuments(query);
         res.send({count});
 
     })
