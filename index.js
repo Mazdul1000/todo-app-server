@@ -70,23 +70,10 @@ async function run(){
         const query = {email};
         const count = await taskCollection.countDocuments(query);
         res.send({count});
-
     })
 
     // Get tasks
-/*     app.get('/task', async(req, res) => {
-        
-        const query= {}
-        
-        
-        const cursor = taskCollection.find(query)
-        if(page || size){
-            
-        }else{
-            
-        }
-        res.send(tasks)
-    }) */
+
 
     app.get('/task', verifyToken, async (req, res) => {
         const email = req.query.email;
@@ -109,6 +96,20 @@ async function run(){
         }
     })
 
+    // GET TASK WITH ID
+    app.get('/task/:id', verifyToken, async(req, res) => {
+    const email= req.query.email;
+    const id = req.params.id;
+    const decodedEmail = req.decoded.email;
+    const filter= {_id: ObjectId(id)}
+
+    if( email === decodedEmail){
+        const result = await taskCollection.findOne(filter);
+        res.send(result)
+    }
+  
+})
+    
     // ADD NEW TASK
     app.post('/task', async (req, res) => {
         const task = req.body;
