@@ -64,7 +64,7 @@ async function run(){
             res.send({ result, token });
         });
 
-    // Get product count
+    // Get task count
     app.get('/task/count', async(req, res) => {
         const query = {};
         const count = await taskCollection.countDocuments();
@@ -72,7 +72,7 @@ async function run(){
 
     })
 
-    // Get products
+    // Get tasks
     app.get('/task', async(req, res) => {
         const page = parseInt(req.query.page);
         const query= {}
