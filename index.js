@@ -97,10 +97,11 @@ async function run(){
     // UPDATE TASK AS COMPLETED
       app.put('/task/:id', async (req, res) => {
         const id = req.params.id;
+        const body = req.body
         const filter =  {_id: ObjectId(id)}
 
         const updateDoc = {
-            $set: { completed: true },
+            $set: body,
         };
         const result = await taskCollection.updateOne(filter, updateDoc);
         res.send(result);
