@@ -43,7 +43,7 @@ async function run(){
         await client.connect();
 
         const userCollection = client.db('todo-db').collection('users');
-        // const taskCollection = client.db('Todo').collection('tasks');
+        const taskCollection = client.db('todo-db').collection('tasks');
 
       
 
@@ -64,15 +64,28 @@ async function run(){
             res.send({ result, token });
         });
 
+    // Get product count
+    app.get('/task/count', async(req, res) => {
+        const query = {};
+        const count = await taskCollection.countDocuments();
+        res.send({count});
 
-        // Get all the task 
-        app.get('/movies', async (req, res) => {
-            const query = {};
-            const cursor = userCollection.find(query);
-            const movies = await cursor.toArray();
-            res.send(movies);
-      
-        });
+    })
+
+    // Get products
+    app.get('/task', async(req, res) => {
+        const page = parseInt(req.query.page);
+        const query= {}
+        let tasks;
+        
+        const cursor = taskCollection.find(query)
+        if(page || size){
+            tasks = await cursor.skip((page-1)*5).limit(5).toArray();
+        }else{
+            tasks = await cursor.toArray();
+        }
+        res.send(tasks)
+    })
         
     }
 
