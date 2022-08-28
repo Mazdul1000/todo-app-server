@@ -100,7 +100,7 @@ async function run() {
         })
 
         // UPDATE USER INFO
-        app.put('/user/profile', async (req, res) => {
+        app.put('/user/profileId/:id', async (req, res) => {
             const id = req.query.id;
             const body = req.body
             const filter = {
