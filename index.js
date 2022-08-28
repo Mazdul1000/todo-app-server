@@ -93,8 +93,8 @@ async function run() {
             }
 
             if (email === decodedEmail) {
-                const result = await userCollection.findOne(filter);
-                res.send({result})
+                const userData = await userCollection.findOne(filter);
+                res.send(userData)
             }
 
         })
