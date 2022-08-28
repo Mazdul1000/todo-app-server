@@ -99,6 +99,21 @@ async function run() {
 
         })
 
+        // UPDATE USER INFO
+        app.put('/user/:id', async (req, res) => {
+            const id = req.params.id;
+            const body = req.body
+            const filter = {
+                _id: ObjectId(id)
+            }
+
+            const updateDoc = {
+                $set: body,
+            };
+            const result = await userCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        })
+
         // Get task count
         app.get('/task/count', async (req, res) => {
             const email = req.query.email;
