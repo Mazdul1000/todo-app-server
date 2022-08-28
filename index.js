@@ -57,9 +57,6 @@ async function run() {
         const userCollection = client.db('todo-db').collection('users');
         const taskCollection = client.db('todo-db').collection('tasks');
 
-
-
-
         // adding users to database:
         app.put('/user/:email', async (req, res) => {
             const email = req.params.email;
@@ -86,6 +83,21 @@ async function run() {
                 token
             });
         });
+
+        // USER INFO 
+        app.get('/user/me', verifyToken, async (req, res) => {
+            const email = req.query.email;
+            const decodedEmail = req.decoded.email;
+            const filter = {
+                email: email
+            }
+
+            if (email === decodedEmail) {
+                const result = await userCollection.findOne(filter);
+                res.send(result)
+            }
+
+        })
 
         // Get task count
         app.get('/task/count', async (req, res) => {
@@ -125,9 +137,7 @@ async function run() {
         })
 
         // Get tasks
-
-
-        app.get('/task', verifyToken, async (req, res) => {
+          app.get('/task', verifyToken, async (req, res) => {
             const email = req.query.email;
             const page = parseInt(req.query.page);
             const decodedEmail = req.decoded.email;
