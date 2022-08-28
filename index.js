@@ -94,7 +94,7 @@ async function run() {
 
             if (email === decodedEmail) {
                 const result = await userCollection.findOne(filter);
-                res.send(result)
+                res.send({result})
             }
 
         })
