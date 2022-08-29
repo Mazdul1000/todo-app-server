@@ -100,11 +100,12 @@ async function run() {
         })
 
         // UPDATE USER INFO
-        app.put('/user/me/:id', async (req, res) => {
-            const id = req.params.id;
-            const body = req.body
+        app.put('/user/me',verifyToken, async(req, res) => {
+            const email = req.query.email;
+            const body = req.body;
+            const decodedEmail = req.decoded.email;
             const filter = {
-                _id: ObjectId(id)
+                email: email
             }
 
             const updateDoc = {
