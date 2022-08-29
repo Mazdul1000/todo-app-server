@@ -104,7 +104,9 @@ async function run() {
             const email = req.query.email;
             const body = req.body;
             const decodedEmail = req.decoded.email;
-            const filter = {
+           
+        if(email === decodedEmail){
+             const filter = {
                 email: email
             }
 
@@ -113,6 +115,13 @@ async function run() {
             };
             const result = await userCollection.updateOne(filter, updateDoc);
             res.send(result);
+        }else {
+            return res.status(403).send({
+                message: 'Access forbidden'
+            })
+        }
+
+            
         })
 
         // Get task count
