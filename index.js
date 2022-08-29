@@ -100,7 +100,7 @@ async function run() {
         })
 
         // UPDATE USER INFO
-        app.put('/user/me',verifyToken, async(req, res) => {
+        app.put('/user/me', verifyToken, async(req, res) => {
             const email = req.query.email;
             const body = req.body;
             const decodedEmail = req.decoded.email;
