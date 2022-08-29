@@ -114,7 +114,7 @@ async function run() {
                 $set: body,
             };
             const result = await userCollection.updateOne(filter, updateDoc);
-            res.send(result);
+           return res.send(result);
         }else {
             return res.status(403).send({
                 message: 'Access forbidden'
