@@ -100,8 +100,8 @@ async function run() {
         })
 
         // UPDATE USER INFO
-        app.put('/user/me', verifyToken, async(req, res) => {
-            const email = req.query.email;
+        app.put('/user/me/:email', verifyToken, async(req, res) => {
+            const email = req.params.email;
             const body = req.body;
             const decodedEmail = req.decoded.email;
            
@@ -115,13 +115,10 @@ async function run() {
             };
             const result = await userCollection.updateOne(filter, updateDoc);
            return res.send(result);
-        }else {
+        }
             return res.status(403).send({
                 message: 'Access forbidden'
             })
-        }
-
-            
         })
 
         // Get task count
